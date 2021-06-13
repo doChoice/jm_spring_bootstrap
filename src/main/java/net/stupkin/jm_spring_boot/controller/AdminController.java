@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,22 +29,19 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String showAllUsers(Model model) {
+    public String showAllUsers(@ModelAttribute("newUser") User newUser, Principal principal, Model model) {
         List<User> allUsers = userService.getAllUsers();
-        model.addAttribute("allUsers",allUsers);
-        return "show-all-users";
-    }
-
-
-    @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user, Model model) {
         List<Role> allRoles = userService.getAllRoles();
+        User authorizedUser = userService.getUserByUsername(principal.getName());
+        model.addAttribute("allUsers",allUsers);
         model.addAttribute("allRoles", allRoles);
-        return "new-user";
+        model.addAttribute("authorizedUser", authorizedUser);
+        return "admin";
     }
+
     @Transactional
     @PostMapping()
-    public String addNewUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+    public String addNewUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam (value ="roles", required = false) Long[] rolesId) {
 
         Set<Role> roles = new HashSet<>();
@@ -52,30 +49,20 @@ public class AdminController {
             roles.add(userService.getRoleById(id));
         }
         user.setRoles(roles);
-        if (bindingResult.hasErrors()) {
-            return "new-user";
-        }
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
 
-    @GetMapping("/{id}/edit")
-    public String editUser(@PathVariable("id") Long id, Model model) {
-        List<Role> allRoles = userService.getAllRoles();
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("allRoles", allRoles);
-
-        return "edit-user";
-    }
-
-
     @PatchMapping("/{id}")
-    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+    public String updateUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam (value ="roles", required = false) Long[] rolesId){
 
-
         Set<Role> roles = new HashSet<>();
+        for (Long id : rolesId) {
+            roles.add(userService.getRoleById(id));
+        }
+        user.setRoles(roles);
         if(rolesId != null) {
             for (Long id : rolesId) {
                 roles.add(userService.getRoleById(id));
@@ -85,9 +72,6 @@ public class AdminController {
             user.setRoles(userService.getUserById(user.getId()).getRoles());
         }
 
-        if (bindingResult.hasErrors()) {
-            return "edit-user";
-        }
         userService.updateUser(user);
         return "redirect:/admin";
     }

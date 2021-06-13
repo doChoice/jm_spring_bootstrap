@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Set;
 
@@ -19,33 +18,24 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "email", unique = true)
-    @NotBlank(message = "Email should not be empty")
-    @Email(message = "Email should be valid")
     private String email;
 
-    @NotBlank(message = "First name should not be empty")
+
     @Column(name="password")
     private String password;
 
     @Column(name = "first_name")
-    @NotBlank(message = "First name should not be empty")
-    @Pattern(regexp = "[a-zA-Z]+", message = "First name should be written in Latin letters")
-    @Size(min = 1, max = 20, message = "First name should be between 1 and 20 characters")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "Last name should not be empty")
-    @Pattern(regexp = "[a-zA-Z]+", message = "Last name should be written in Latin letters")
-    @Size(min = 1, max = 25, message = "Last name should be between 1 and 25 characters")
     private String lastName;
 
     @Column(name = "age")
-    @Min(value = 1, message = "Age should be grater than 1")
     private int age;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST
-            , CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+            , CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH} )
     @JoinTable(
             name = "users_roles"
             , joinColumns = @JoinColumn(name = "user_id")
