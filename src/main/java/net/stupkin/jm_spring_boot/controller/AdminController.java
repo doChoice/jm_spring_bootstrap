@@ -39,7 +39,7 @@ public class AdminController {
         return "admin";
     }
 
-    @Transactional
+    //@Transactional
     @PostMapping()
     public String addNewUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam (value ="roles", required = false) Long[] rolesId) {
