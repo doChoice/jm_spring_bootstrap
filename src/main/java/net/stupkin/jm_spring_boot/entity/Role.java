@@ -68,6 +68,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return roleName + " ";
+        return roleName.replace("ROLE_", " ");
     }
 }

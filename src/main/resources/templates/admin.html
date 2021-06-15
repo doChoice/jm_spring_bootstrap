@@ -82,7 +82,7 @@
                             <td>
                               <span class="text"
                                  th:each="role : ${user.getRoles()}"
-                                 th:text="${role.getRoleName().replaceFirst('ROLE_', ' ')}">roles
+                                 th:text="${role}">roles
                               </span>
                             </td>
                             <td>
@@ -154,7 +154,8 @@
                                           <select multiple class="form-control" th:name="roles" id="rolesForEdit" size="2">
                                             <option th:each="role : ${allRoles}"
                                                     th:value="${role.id}"
-                                                    th:text="${role.roleName}">role
+                                                    th:text="${role}"
+                                                    th:selected="${user.getRoles().contains(role)}">role
                                             </option>
                                           </select>
                                         </div>
@@ -221,7 +222,7 @@
                                           <select multiple class="form-control" th:name="roles" id="rolesForDelete" size="2" disabled>
                                             <option th:each="role : ${allRoles}"
                                                     th:value="${role.id}"
-                                                    th:text="${role.roleName}">role
+                                                    th:text="${role}">role
                                             </option>
                                           </select>
                                         </div>
@@ -274,7 +275,7 @@
                             <select multiple class="form-control" th:name="roles" id="roles" size="2" required>
                               <option th:each="role : ${allRoles}"
                                       th:value="${role.id}"
-                                      th:text="${role.roleName}">role
+                                      th:text="${role}">role
                               </option>
                             </select>
                           </div>
@@ -315,7 +316,7 @@
                           <td>
                             <span class="text"
                                   th:each="role : ${authorizedUser.getRoles()}"
-                                  th:text="${role.getRoleName().replaceFirst('ROLE_', ' ')}">roles
+                                  th:text="${role}">roles
                             </span>
                           </td>
                         </tr>
@@ -337,9 +338,3 @@
   </body>
 
 </html>
-
-
-<!--      <form th:method="GET" th:action="@{/admin/new}">-->
-<!--        <input type="submit" value="Add new user">-->
-<!--      </form>-->
-<!--      <br><br>-->

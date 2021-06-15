@@ -6,7 +6,6 @@ import net.stupkin.jm_spring_boot.entity.User;
 import net.stupkin.jm_spring_boot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +38,6 @@ public class AdminController {
         return "admin";
     }
 
-    //@Transactional
     @PostMapping()
     public String addNewUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam (value ="roles", required = false) Long[] rolesId) {
@@ -63,15 +61,6 @@ public class AdminController {
             roles.add(userService.getRoleById(id));
         }
         user.setRoles(roles);
-        if(rolesId != null) {
-            for (Long id : rolesId) {
-                roles.add(userService.getRoleById(id));
-            }
-            user.setRoles(roles);
-        } else {
-            user.setRoles(userService.getUserById(user.getId()).getRoles());
-        }
-
         userService.updateUser(user);
         return "redirect:/admin";
     }
