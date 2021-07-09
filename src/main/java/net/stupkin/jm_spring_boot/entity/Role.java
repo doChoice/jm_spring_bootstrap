@@ -4,7 +4,6 @@ package net.stupkin.jm_spring_boot.entity;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name="roles")
@@ -16,9 +15,6 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "name_role")
     private String roleName;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
 
     public Role() {
     }
@@ -52,13 +48,6 @@ public class Role implements GrantedAuthority {
         this.roleName = role;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     @Override
     public String getAuthority() {
@@ -68,6 +57,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return roleName.replace("ROLE_", " ");
+        return roleName + " ";
     }
 }

@@ -1,6 +1,5 @@
 package net.stupkin.jm_spring_boot.controller;
 
-
 import net.stupkin.jm_spring_boot.entity.Role;
 import net.stupkin.jm_spring_boot.entity.User;
 import net.stupkin.jm_spring_boot.service.UserService;
@@ -18,9 +17,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
     private final UserService userService;
-
 
     @Autowired
     public AdminController(UserService userService) {
@@ -31,7 +28,7 @@ public class AdminController {
     public String showAllUsers(@ModelAttribute("newUser") User newUser, Principal principal, Model model) {
         List<User> allUsers = userService.getAllUsers();
         List<Role> allRoles = userService.getAllRoles();
-        User authorizedUser = userService.getUserByUsername(principal.getName());
+        User authorizedUser = userService.getUserByEmail(principal.getName());
         model.addAttribute("allUsers",allUsers);
         model.addAttribute("allRoles", allRoles);
         model.addAttribute("authorizedUser", authorizedUser);
@@ -51,8 +48,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public String updateUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam (value ="roles", required = false) Long[] rolesId){
 

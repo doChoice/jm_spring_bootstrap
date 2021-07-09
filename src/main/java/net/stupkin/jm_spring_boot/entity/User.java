@@ -1,11 +1,13 @@
 package net.stupkin.jm_spring_boot.entity;
 
-
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +22,6 @@ public class User implements UserDetails {
     @Column(name = "email", unique = true)
     private String email;
 
-
     @Column(name="password")
     private String password;
 
@@ -33,14 +34,12 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "users_roles"
             , joinColumns = @JoinColumn(name = "user_id")
             , inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-
     private Set<Role> roles;
 
     public User() {
@@ -54,7 +53,6 @@ public class User implements UserDetails {
         this.email = email;
         this.roles = roles;
     }
-
 
     public Long getId() {
         return id;
@@ -110,7 +108,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
+        for (Role role: roles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
+        }
+        return authorities;
     }
 
     @Override

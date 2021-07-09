@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping()
     public String showUserById(Principal principal, Model model) {
-        User authorizedUser = userService.getUserByUsername(principal.getName());
+        User authorizedUser = userService.getUserByEmail(principal.getName());
         model.addAttribute("authorizedUser", authorizedUser);
         return "user";
     }

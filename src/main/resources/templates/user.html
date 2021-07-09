@@ -62,7 +62,7 @@
                                                     <td>
                                                         <span class="text"
                                                             th:each="role : ${authorizedUser.getRoles()}"
-                                                            th:text="${role.getRoleName().replaceFirst('ROLE_', ' ')}">roles
+                                                            th:text="${role}">roles
                                                         </span>
                                                     </td>
                                                 </tr>

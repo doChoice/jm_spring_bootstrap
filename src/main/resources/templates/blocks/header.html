@@ -1,19 +1,17 @@
 <div th:fragment="header">
-  <div class="container-fluid bg-dark">
-    <div class="row justify-content-between">
-      <div class="col-md-11 text-white py-2">
-
-        <span class="font-weight-bold" th:text="${authorizedUser.getEmail()}">User</span>
-        with roles:
-        <span class="text"
-              th:each="role : ${authorizedUser.getRoles()}"
-              th:text="${role}">roles
+  <nav class="navbar navbar-dark bg-dark navbar-dark">
+    <a class="navbar-brand">
+      <span class="font-weight-bold" th:text="${authorizedUser.getEmail()}">User</span>
+      with roles:
+      <span class="text"
+            th:each="role : ${authorizedUser.getRoles()}"
+            th:text="${role}">roles
             </span>
-
-      </div>
-      <div class="col-md-1 text-right">
-        <a class="nav-link text-secondary pr-0" href="/logout">Logout</a>
-      </div>
-    </div>
-  </div>
+    </a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+  </nav>
 </div>

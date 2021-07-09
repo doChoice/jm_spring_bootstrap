@@ -1,7 +1,6 @@
 package net.stupkin.jm_spring_boot.dao;
 
 
-
 import net.stupkin.jm_spring_boot.entity.Role;
 import net.stupkin.jm_spring_boot.entity.User;
 

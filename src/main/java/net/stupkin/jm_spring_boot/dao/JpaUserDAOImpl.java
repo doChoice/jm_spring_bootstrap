@@ -1,6 +1,5 @@
 package net.stupkin.jm_spring_boot.dao;
 
-
 import net.stupkin.jm_spring_boot.entity.Role;
 import net.stupkin.jm_spring_boot.entity.User;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class JpaUserDAOImpl implements UserDAO {
     @Override
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
+        return entityManager.createQuery("select distinct u from User u join fetch u.roles", User.class).getResultList();
     }
 
     @Override
@@ -37,7 +36,10 @@ public class JpaUserDAOImpl implements UserDAO {
     @Override
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
-        return entityManager.find(User.class, id);
+        User user = entityManager.createQuery("select u from User u join fetch u.roles where u.id = :id", User.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        return user;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class JpaUserDAOImpl implements UserDAO {
     @Override
     @Transactional(readOnly = true)
     public User getUserByEmail(String emailForUsername) {
-        User user = entityManager.createQuery("select u from User u where email = :email", User.class)
+        User user = entityManager.createQuery("select u from User u join fetch u.roles where u.email = :email", User.class)
                 .setParameter("email", emailForUsername)
                 .getSingleResult();
         return user;
